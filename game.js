@@ -25,7 +25,8 @@ function playRound(computerSelection, playerSelection) {
 
 function playGame() {
 
-    const overall = 0;
+    const computerRecord = 0;
+    const playerRecord = 0;
 
     for (let i = 0; i <= 4; i++) {
         let computerSelection = getComputerSelection()
@@ -39,12 +40,22 @@ function playGame() {
         } while (true);
 
         if (playRound(computerSelection, playerSelection) === "computer") {
-            console.log(`You lose because the computer's ${computerSelection} beats your ${playerSelection}!`)
+            console.log(`You lost that round because the computer's ${computerSelection} beats your ${playerSelection}!`)
+            computerRecord++
         } else if (playRound(computerSelection, playerSelection) === "player") {
-            console.log(`You win because the computer's ${computerSelection} loses to your ${playerSelection}!`)
+            console.log(`You win that round because the computer's ${computerSelection} loses to your ${playerSelection}!`)
+            playerRecord++
         } else {
-            console.log(`It's a draw because the computer's ${computerSelection} ties your ${playerSelection}!`)
+            console.log(`It's a draw that round because the computer's ${computerSelection} ties your ${playerSelection}!`)
         }
+    }
+
+    if (computerRecord > playerRecord) {
+        console.log(`The computer wins the game! The computer beat you ${computerRecord} times to ${playerRecord} times.`)
+    } else if (playerRecord > computerRecord) {
+        console.log(`You win the game! You beat the computer ${playerRecord} times to ${computerRecord} times.`)
+    } else {
+        console.log("Wow! What are the odds. You tied every single round.")
     }
 
 }
