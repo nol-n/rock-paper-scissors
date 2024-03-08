@@ -7,7 +7,7 @@ function getComputerSelection() {
 function playRound(computerSelection, playerSelection) {
     let winner = "";
     playerSelection = playerSelection.toLowerCase();
-    if (computerSelection === "rock" && playerSelection === "paper") {
+    if (computerSelection === "rock" && playerSelection === "scissors") {
         winner = "computer";
     } else if (computerSelection === "paper" && playerSelection === "rock") {
         winner = "computer";
@@ -23,43 +23,56 @@ function playRound(computerSelection, playerSelection) {
     return winner;
 }
 
-function playGame() {
+const btns = document.querySelectorAll('.btn');
 
-    let computerRecord = 0;
-    let playerRecord = 0;
+let computerRecord = 0;
+let playerRecord = 0;
 
-    for (let i = 0; i <= 4; i++) {
-        let computerSelection = getComputerSelection()
-        do {
-            let playerSelection = prompt("Enter rock, paper, or scissors.", "").toLowerCase();;
-            if (playerSelection == "rock" || playerSelection == "paper" || playerSelection == "scissors") {
+btns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+        const playerSelection = btn.name;
+        const computerSelection = getComputerSelection();
 
-                if (playRound(computerSelection, playerSelection) === "computer") {
-                    console.log(`You lost that round because the computer's ${computerSelection} beats your ${playerSelection}!`)
-                    computerRecord++
-                } else if (playRound(computerSelection, playerSelection) === "player") {
-                    console.log(`You win that round because the computer's ${computerSelection} loses to your ${playerSelection}!`)
-                    playerRecord++
-                } else {
-                    console.log(`It's a draw that round because the computer's ${computerSelection} ties your ${playerSelection}!`)
-                }
+        console.log(computerSelection)
 
-                break;
+        const rounds_div = document.querySelector('#rounds');
+        const round_div = document.createElement('div');
+        round_div.setAttribute('id', 'roundResult');
+        rounds_div.append(round_div);
+        const record_div = document.createElement('div');
+        record_div.setAttribute('id', 'record');
+        rounds_div.append(record_div);
+
+        if (playRound(computerSelection, playerSelection) === "computer") {
+            computerRecord++
+            round_div.textContent = `You lost that round because the computer's ${computerSelection} beats your ${playerSelection}!`;
+            record_div.textContent = `The computer has won ${computerRecord} times and you have won ${playerRecord} times.`;
+
+        } else if (playRound(computerSelection, playerSelection) === "player") {
+            playerRecord++
+            round_div.textContent = `You win that round because the computer's ${computerSelection} loses to your ${playerSelection}!`;
+            record_div.textContent = `The computer has won ${computerRecord} times and you have won ${playerRecord} times.`;
+
+        } else {
+            round_div.textContent = `It's a draw that round because the computer's ${computerSelection} ties your ${playerSelection}!`;
+            record_div.textContent = `The computer has won ${computerRecord} times and you have won ${playerRecord} times.`;
+        }
+
+        if (computerRecord === 5 || playerRecord === 5) {
+            const winner_div = document.createElement('div');
+            winner_div.setAttribute('id', 'winner');
+            rounds_div.append(winner_div);
+
+            if (computerRecord === 5) {
+                winner_div.textContent = `The computer wins the game! The computer beat you ${computerRecord} times to ${playerRecord} times.`;
 
             } else {
-                console.log("Invalid input. Enter one of the aforementioned strings.")
+                winner_div.textContent = `You win the game! You beat the computer ${playerRecord} times to ${computerRecord} times.`;
             }
-        } while (true);
 
-    }
+            computerRecord = 0;
+            playerRecord = 0;
 
-    if (computerRecord > playerRecord) {
-        console.log(`The computer wins the game! The computer beat you ${computerRecord} times to ${playerRecord} times.`)
-    } else if (playerRecord > computerRecord) {
-        console.log(`You win the game! You beat the computer ${playerRecord} times to ${computerRecord} times.`)
-    } else {
-        console.log(`Wow! What are the odds. You tied with ${playerRecord} wins to the computer's ${computerRecord} wins.`)
-    }
-}
-
-playGame();
+        }
+    });
+});
